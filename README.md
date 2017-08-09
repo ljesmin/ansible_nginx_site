@@ -7,4 +7,6 @@ nginx_site_include_dir
 nginx_site_dir
 nginx_site_name
 nginx_site_aliases
-nginx_site_default 
+nginx_site_default
+nginx_site_includes
+nginx_site_configblock
