@@ -23,8 +23,8 @@ server {
   include {{ nginx_site_include_dir }}/{{ i }}.conf;
 {% endfor %}
 
-  access_log /var/log/nginx/{{ nginx_site_name }}_access.log;
-  error_log /var/log/nginx/{{ nginx_site_name }}_error.log;
+  access_log {{ nginx_site_logdir }}/{{ nginx_site_name }}_access.log;
+  error_log {{ nginx_site_logdir }}/{{ nginx_site_name }}_error.log;
 
   root {{ nginx_site_root }};
   {% if nginx_site_configblock is defined %}
