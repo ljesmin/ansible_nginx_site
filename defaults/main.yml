@@ -3,3 +3,4 @@ nginx_site_letsencrypt: True
 nginx_site_include_dir: "/etc/nginx/include"
 nginx_site_dir: "/etc/nginx/sites-enabled"
 nginx_site_logdir: "/var/log/nginx"
+nginx_site_certbot: "letsencrypt"

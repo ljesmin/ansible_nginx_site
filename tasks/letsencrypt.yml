@@ -30,7 +30,7 @@
 - name: template letsencrypt command
   template:
     dest: /root/letsencrypt_{{ nginx_site_name }}.sh
-    src: "{{ nginx_site_letsencrypt }}.sh.j2"
+    src: "{{ nginx_site_certbot }}.sh.j2"
     owner: root
     group: root
     mode: 0700
