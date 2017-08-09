@@ -1,0 +1,6 @@
+- name: run config with letsencrypt
+  include: letsencrypt.yml
+  when: nginx_site_letsencrypt
+- name: run config without letsencrypt
+  include: regular_site.yml
+  when: not nginx_site_letsencrypt

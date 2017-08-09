@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/bin/certbot certonly --webroot-path /var/www/letsencrypt --email {{ nginx_site_email }} -n --webroot --agree-tos -d {{ nginx_site_name }}{% if nginx_site_aliases is defined %}{% for i in nginx_site_aliases %} -d {{ i }}{% endfor %}{% endif%}

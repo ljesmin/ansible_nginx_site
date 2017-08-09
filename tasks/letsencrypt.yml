@@ -1,0 +1,62 @@
+- name: create letsencrypt config file
+  copy:
+    src: 'letsencrypt.conf'
+    dest: "{{ nginx_site_include_dir }}/letsencrypt.conf"
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+- name: create directory for letsencrypt
+  file:
+    path: "/var/www/letsencrypt"
+    state: directory
+    group: root
+    owner: root
+    mode: 0755
+- name: check if certificate exists
+  stat: path="/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
+  register: cert
+- name: create port 80 site for letsencrypt
+  template:
+    src: site.conf.j2
+    dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
+    owner: root
+    group: root
+  vars:
+    nginx_site_ssl: false
+  notify: test nginx config
+  when: cert.stat.exists is not defined or not cert.stat.exists
+- name: flush handlers
+  meta: flush_handlers
+- name: template letsencrypt command
+  template:
+    dest: /root/letsencrypt_{{ nginx_site_name }}.sh
+    src: "{{ nginx_site_letsencrypt }}.sh.j2"
+    owner: root
+    group: root
+    mode: 0700
+- name: run letsencrypt command
+  command: /root/letsencrypt_{{ nginx_site_name }}.sh
+  when: cert.stat.exists is not defined or not cert.stat.exists
+- name: check if certificate exists
+  stat: path="/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
+  register: cert
+- name: create site without SSL
+  template:
+    src: site.conf.j2
+    dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
+    owner: root
+    group: root
+  vars:
+    nginx_site_ssl: false
+  notify: test nginx config
+  when: cert.stat.exists is not defined or not cert.stat.exists
+- name: create SSL site
+  template:
+    src: site.conf.j2
+    dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
+    owner: root
+    group: root
+  vars:
+    nginx_site_ssl: true
+  notify: test nginx config
+  when: cert.stat.exists is defined and cert.stat.exists

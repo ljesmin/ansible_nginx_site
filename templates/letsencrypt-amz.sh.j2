@@ -1,0 +1,5 @@
+#!/bin/bash
+
+unset PYTHON_INSTALL_LAYOUT
+
+/usr/local/bin/certbot-auto certonly --webroot-path /var/www/letsencrypt --debug --email {{ nginx_site_email }} -n --webroot --agree-tos -d {{ nginx_site_name }}{% if nginx_site_aliases is defined %}{% for i in nginx_site_aliases %} -d {{ i }}{% endfor %}{% endif%}

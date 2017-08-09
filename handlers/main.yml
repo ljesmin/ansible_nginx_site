@@ -1,0 +1,5 @@
+- name: test nginx config
+  command: /usr/sbin/nginx -t
+  notify: reload nginx
+- name: reload nginx
+  service: name=nginx state=reloaded
