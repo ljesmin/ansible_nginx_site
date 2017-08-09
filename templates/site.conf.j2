@@ -10,6 +10,7 @@ server {
 {% else %}
   ssl_certificate {{ nginx_site_cert }};
   ssl_certificate_key {{ nginx_site_key }};
+{% endif %}
 {% else %}
   listen 80;
 {% endif %}
