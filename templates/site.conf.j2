@@ -43,8 +43,13 @@ server {
   listen 443;
 
   ssl on;
+{% if nginx_site_letsencrypt %}
   ssl_certificate /etc/letsencrypt/live/{{ nginx_site_name }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ nginx_site_name }}/privkey.pem;
+{% else %}
+  ssl_certificate {{ nginx_site_cert }};
+  ssl_certificate_key {{ nginx_site_key }};
+{% endif %}
   server_name{% for i in nginx_site_aliases %} {{ i }}{% endfor %};
   return 301 https://{{ nginx_site_name }}$request_uri;
 }
