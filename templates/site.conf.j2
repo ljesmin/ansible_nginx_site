@@ -23,7 +23,7 @@ server {
   include {{ nginx_site_include_dir }}/{{ i }}.conf;
 {% endfor %}
 
-  access_log {{ nginx_site_logdir }}/{{ nginx_site_name }}_access.log;
+  access_log {{ nginx_site_logdir }}/{{ nginx_site_name }}_access.log{% if nginx_site_log_format is defined %} {{ nginx_site_log_format }}{% endif %};
   error_log {{ nginx_site_logdir }}/{{ nginx_site_name }}_error.log;
 
   root {{ nginx_site_root }};
