@@ -1,9 +1,8 @@
 
 server {
 {% if nginx_site_ssl %}
-  listen 443{% if nginx_site_default %} default_server{% endif %};
+  listen 443 ssl http2{% if nginx_site_default %} default_server{% endif %};
 
-  ssl on;
 {% if nginx_site_letsencrypt %}
   ssl_certificate /etc/letsencrypt/live/{{ nginx_site_name }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ nginx_site_name }}/privkey.pem;
@@ -40,9 +39,8 @@ server {
 }
 {% if nginx_site_aliases is defined %}
 server {
-  listen 443;
+  listen 443 ssl http2;
 
-  ssl on;
 {% if nginx_site_letsencrypt %}
   ssl_certificate /etc/letsencrypt/live/{{ nginx_site_name }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ nginx_site_name }}/privkey.pem;
