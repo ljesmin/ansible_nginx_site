@@ -1,6 +1,7 @@
-- name: run config with letsencrypt
-  include_tasks: letsencrypt.yml
-  when: nginx_site_letsencrypt|bool
-- name: run config without letsencrypt
-  include_tasks: regular_site.yml
+- name: Run config with letsencrypt
+  ansible.builtin.include_tasks: letsencrypt.yml
+  when: nginx_site_letsencrypt | bool
+
+- name: Run config without letsencrypt
+  ansible.builtin.include_tasks: regular_site.yml
   when: not nginx_site_letsencrypt

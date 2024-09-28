@@ -1,62 +1,63 @@
-- name: create letsencrypt config file
-  copy:
+- name: Create letsencrypt config file
+  ansible.builtin.copy:
     src: 'letsencrypt.conf'
     dest: "{{ nginx_site_include_dir }}/letsencrypt.conf"
     owner: 'root'
     group: 'root'
-    mode: 0644
-- name: create directory for letsencrypt
-  file:
+    mode: '0644'
+
+- name: Create directory for letsencrypt
+  ansible.builtin.file:
     path: "/var/www/letsencrypt"
     state: directory
-    group: root
-    owner: root
-    mode: 0755
-- name: check if certificate exists
-  stat: path="/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
+    group: 'root'
+    owner: 'root'
+    mode: '0755'
+
+- name: Check if certificate exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
   register: cert
-- name: create port 80 site for letsencrypt
-  template:
-    src: site.conf.j2
+
+- name: Create port 80 site for letsencrypt
+  ansible.builtin.template:
+    src: 'site.conf.j2'
     dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
-    owner: root
-    group: root
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
   vars:
     nginx_site_ssl: false
-  notify: test nginx config
+  notify: nginx_site Test config
   when: cert.stat.exists is not defined or not cert.stat.exists
-- name: flush handlers
-  meta: flush_handlers
-- name: template letsencrypt command
-  template:
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Template letsencrypt command
+  ansible.builtin.template:
     dest: /root/letsencrypt_{{ nginx_site_name }}.sh
     src: "{{ nginx_site_certbot }}.sh.j2"
-    owner: root
-    group: root
-    mode: 0700
-- name: run letsencrypt command
-  command: /root/letsencrypt_{{ nginx_site_name }}.sh
+    owner: 'root'
+    group: 'root'
+    mode: '0700'
+- name: Get certificate from Letsencrypt
+  ansible.builtin.command: /root/letsencrypt_{{ nginx_site_name }}.sh
   when: cert.stat.exists is not defined or not cert.stat.exists
-- name: check if certificate exists
-  stat: path="/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
+
+- name: Check if certificate exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ nginx_site_name }}/cert.pem"
   register: cert
-- name: create site without SSL
-  template:
+
+- name: Create SSL site
+  ansible.builtin.template:
     src: site.conf.j2
     dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
-    owner: root
-    group: root
-  vars:
-    nginx_site_ssl: false
-  notify: test nginx config
-  when: cert.stat.exists is not defined or not cert.stat.exists
-- name: create SSL site
-  template:
-    src: site.conf.j2
-    dest: "{{ nginx_site_dir }}/{{ nginx_site_name }}.conf"
-    owner: root
-    group: root
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
   vars:
     nginx_site_ssl: true
-  notify: test nginx config
+  notify: nginx_site Test config
   when: cert.stat.exists is defined and cert.stat.exists

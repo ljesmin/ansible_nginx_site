@@ -1,5 +1,8 @@
-- name: test nginx config
-  command: /usr/sbin/nginx -t
-  notify: reload nginx
-- name: reload nginx
-  service: name=nginx state=reloaded
+- name: nginx_site Test config
+  ansible.builtin.command: /usr/sbin/nginx -t
+  notify: nginx_site Reload config
+
+- name: nginx_site Reload config
+  ansible.builtin.service:
+    name: 'nginx'
+    state: 'reloaded'
