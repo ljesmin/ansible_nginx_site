@@ -1,5 +1,5 @@
-nginx_site_default: False
-nginx_site_letsencrypt: True
+nginx_site_default: false
+nginx_site_letsencrypt: true
 nginx_site_include_dir: "/etc/nginx/include"
 nginx_site_dir: "/etc/nginx/sites-enabled"
 nginx_site_logdir: "/var/log/nginx"
