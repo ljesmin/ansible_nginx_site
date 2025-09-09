@@ -4,13 +4,15 @@ galaxy_info:
   description: Nginx site configuration
   company: Nordtech
   license: MIT
-  min_ansible_version: 2.0
+  min_ansible_version: "2.0"
   platforms:
-  - name: EL
-    versions:
-    - 7
-  - name: Ubuntu
-    versions:
-    - trusty
-    - xenial
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+        - "9"
+    - name: Ubuntu
+      versions:
+      - trusty
+      - xenial
 
